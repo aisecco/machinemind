@@ -1,0 +1,64 @@
+# import MySQLdb (python2)
+import pymysql
+import pandas as pd
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='123456', database='fcdb_pub', charset='utf8')
+cur = conn.cursor(cursor=pymysql.cursors.DictCursor)
+
+cur.execute("SELECT VERSION()")
+data = cur.fetchone()
+print ("Database version : %s\n" % data)
+
+# sql = 'select * from tq_qt_skdailyprice'
+sql = 'SELECT * FROM `fcdb_pub`.`tq_qt_skdailyprice` WHERE `SECODE` = 2010000438'
+cur.execute(sql)
+rows = cur.fetchall()
+for row in rows:
+    print("%s" % row)
+
+sql = 'SELECT * FROM `fcdb_pub`.`tq_qt_skdailyprice` WHERE `SECODE` = %s'
+# sql = "SELECT 'ID', 'TRADEDATE', 'SECODE', 'EXCHANGE', 'SENAME',  'LCLOSE', 'TOPEN', 'TCLOSE', 'THIGH', 'TLOW', 'VOL', 'AMOUNT',  'DEALS' FROM `fcdb_pub`.`tq_qt_skdailyprice` WHERE `SECODE` = %s"
+# code = input('secode: ')
+code = '2010000438'
+res = cur.execute(sql, code)
+
+print("%s" % res)
+
+# res = cur.fetchmany()
+rows = cur.fetchall()
+
+fields = [field[0] for field in cur.description]
+# fields_array = [dict(zip(fields, result)) for result in rows]
+
+# [{'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}]
+fields_of = {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}, {'ID': 'ID', 'TRADEDATE': 'TRADEDATE', 'SECODE': 'SECODE', 'EXCHANGE': 'EXCHANGE', 'SENAME': 'SENAME', 'LCLOSE': 'LCLOSE', 'TOPEN': 'TOPEN', 'TCLOSE': 'TCLOSE', 'THIGH': 'THIGH', 'TLOW': 'TLOW', 'VOL': 'VOL', 'AMOUNT': 'AMOUNT', 'DEALS': 'DEALS', 'AVGPRICE': 'AVGPRICE', 'AVGVOL': 'AVGVOL', 'AVGTRAMT': 'AVGTRAMT', 'CHANGE': 'CHANGE', 'PCHG': 'PCHG', 'AMPLITUDE': 'AMPLITUDE', 'NEGOTIABLEMV': 'NEGOTIABLEMV', 'TOTMKTCAP': 'TOTMKTCAP', 'TURNRATE': 'TURNRATE', 'ISVALID': 'ISVALID', 'TMSTAMP': 'TMSTAMP', 'ENTRYDATE': 'ENTRYDATE', 'ENTRYTIME': 'ENTRYTIME'}
+
+fields_array = [ 'ID', 'TRADEDATE', 'SECODE', 'EXCHANGE', 'SENAME',  'LCLOSE', 'TOPEN', 'TCLOSE', 'THIGH', 'TLOW', 'VOL', 'AMOUNT','DEALS',
+ 'AVGPRICE', 'AVGVOL', 'AVGTRAMT', 'CHANGE', 'PCHG', 'AMPLITUDE', 'NEGOTIABLEMV', 'TOTMKTCAP', 'TURNRATE', 'ISVALID', 'TMSTAMP',
+ 'ENTRYDATE', 'ENTRYTIME']
+
+print(fields_array) # temp
+
+# result_fmted = pd.DataFrame(list(rows), columns = fields_array)
+result_fmted = pd.DataFrame(rows) #
+print(result_fmted.shape)
+print(result_fmted.head())
+
+for row in rows:
+    print("%s" % row)
+
+cur.close()
+conn.close()
+
+# 形成json
+data = "["
+
+#形成json格式数据
+for name,score in zip(rows[0],rows[0]):
+	data = data + '{\"'+ name +'\":"' + score  + '"},'
+data = data.rstrip(',')
+data = data + "]"
+print(data)
+
+
+
